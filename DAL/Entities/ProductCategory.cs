@@ -13,6 +13,7 @@ namespace DAL.Entities
         public string Name { get; set; } = string.Empty;
         public string Describtion { get; set; } = string.Empty;
         public string PictureRef { get; set; } = string.Empty;
-        public List<Product> Product { get; set; }
+
+       // public List<Product> Product { get; set; }
     }
 }

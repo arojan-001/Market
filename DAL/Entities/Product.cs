@@ -12,8 +12,7 @@ namespace DAL.Entities
         public string Name { get; set; } = string.Empty;
         public decimal Price { get; set; }
         public float Qnty { get; set; }
-
-        public int ProductCategoryId { get; set; }
+        public int ProductCategoryId { get; set; } 
         public List<Order> Order { get; set; }
     }
 }

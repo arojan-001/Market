@@ -9,8 +9,8 @@ namespace BLL.Dto
     public class ProductCategoryDto
     {
         public int Id { get; set; }
-        public String Name { get; set; } = String.Empty;
-        public String Describtion { get; set; } = String.Empty;
-        public String PictureRef { get; set; } = String.Empty;
+        public string Name { get; set; } = string.Empty;
+        public string Describtion { get; set; } = string.Empty;
+        public string PictureRef { get; set; } = string.Empty;
     }
 }
