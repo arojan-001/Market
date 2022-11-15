@@ -13,7 +13,8 @@ namespace BLL.Intefaces
     {
         Task<ServiceResponse<List<ProductCategoryDto>>> GetProductCategories();
         Task<ServiceResponse<ProductCategoryDto>> GetProductCategory(int id);
-   
         Task<ServiceResponse<List<ProductCategoryDto>>> AddProductCategory(ProductCategoryDto productCategory);
+        Task<ServiceResponse<ProductCategoryDto>> UpdateProductCategory(ProductCategoryDto productCategoryDto);
+        Task<ServiceResponse<List<ProductCategoryDto>>> DeleteProductCategory(int id);
     }
 }

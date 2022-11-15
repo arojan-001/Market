@@ -48,6 +48,45 @@ namespace BLL.Services
             serviceRespone.Data =_mapper.Map<ProductCategoryDto>(productCategory);
             return serviceRespone;
         }
+        public async Task<ServiceResponse<ProductCategoryDto>> UpdateProductCategory(ProductCategoryDto productCategoryDto)
+        {
+            var serviceRespone = new ServiceResponse<ProductCategoryDto>();
+
+            try {
+                ProductCategory productCategory = productCategories.FirstOrDefault(c => c.Id == productCategoryDto.Id);
+
+                _mapper.Map(productCategoryDto, productCategory);
+                //productCategory.Name = productCategoryDto.Name;
+                //productCategory.Describtion = productCategoryDto.Describtion;
+                //productCategory.PictureRef = productCategoryDto.PictureRef;
+
+                serviceRespone.Data = _mapper.Map<ProductCategoryDto>(productCategory);
+            }
+            catch (Exception ex)
+            {
+                serviceRespone.Error = ex.Message;
+                serviceRespone.Success = false;
+            }
+            return serviceRespone;
+        }
+        public async Task<ServiceResponse<List<ProductCategoryDto>>> DeleteProductCategory(int id)
+        {
+            var serviceRespone = new ServiceResponse<List<ProductCategoryDto>>();
+            try
+            {
+                ProductCategory productCategory = productCategories.First(c => c.Id == id);
+
+                productCategories.Remove(productCategory);
+
+                serviceRespone.Data = productCategories.Select(c => _mapper.Map<ProductCategoryDto>(c)).ToList();
+            }
+            catch (Exception ex)
+            {
+                serviceRespone.Error = ex.Message;
+                serviceRespone.Success = false;
+            }
+            return serviceRespone;
+        }
 
     }
 }

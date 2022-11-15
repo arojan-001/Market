@@ -32,6 +32,28 @@ namespace Market.Controllers
         {
             return Ok(await _productCategoryservice.AddProductCategory(productCategory));
         }
+        [HttpPut]
+        public async Task<ActionResult<ServiceResponse<ProductCategoryDto>>> UpdateProductCategory(ProductCategoryDto productCategory)
+        {
+            var response = await _productCategoryservice.UpdateProductCategory(productCategory);
+            if( response.Data == null)
+            {
+                return BadRequest(response);
+            }
 
+            return Ok(response);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<ServiceResponse<List<ProductCategoryDto>>>> DeleteProductCategory(int id)
+        {
+            var response = await _productCategoryservice.DeleteProductCategory(id);
+            if (response.Data == null)
+            {
+                return BadRequest(response);
+            }
+
+            return Ok(response);
+        }
     }
 }
