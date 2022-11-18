@@ -6,12 +6,14 @@ using System.Threading.Tasks;
 
 namespace BLL.Dto
 {
-    public class OrderDto
+    public class OrderDetailsDto
     {
         public int Id { get; set; }
+        public decimal Quantity { get; set; }
         public decimal Price { get; set; }
-        public DateTime Valuedate { get; set; }
-        public int CustomerId { get; set; }
-        public int EmployeeId { get; set; }
+        public int OrderId { get; set; }
+        public int ProductId { get; set; }
+
+       
     }
 }

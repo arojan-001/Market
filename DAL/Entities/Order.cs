@@ -5,14 +5,14 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace DAL.Entities
-{
+{     
     public class Order
     {
         public int Id { get; set; }
-        public float Quantity { get; set; }
         public decimal Price { get; set; }
         public DateTime Valuedate { get; set; }
-        public Product Product { get; set; }
-        public int ProductId { get; set; }
+        public int CustomerId { get; set; } = 0;
+        public int EmployeeId { get; set; } = 0;
+       // public List<OrderDetails> OrderDetails { get; set; }
     }
 }

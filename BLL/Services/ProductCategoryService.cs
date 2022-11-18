@@ -14,7 +14,7 @@ namespace BLL.Services
     public class ProductCategoryService : IProductCategoryService
     {
       private static List<ProductCategory> productCategories = new List<ProductCategory>{
-          new ProductCategory{ Name= "Xmichq", Describtion = "ALKOHOLAYIN", PictureRef = "C://img.jpg" },
+          new ProductCategory{ Id = 2, Name= "Xmichq", Describtion = "ALKOHOLAYIN", PictureRef = "C://img.jpg" },
           new ProductCategory{ Id = 1, Name= "Xmichq1", Describtion = "Voch ALKOHOLAYIN", PictureRef = "C://img1.jpg"}
 
     };

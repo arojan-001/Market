@@ -10,7 +10,7 @@ namespace BLL.Dto
     {
         public int Id { get; set; }
         public String Name { get; set; } = String.Empty;
-        public decimal Price { get; set; }
+        public decimal PriceOfUnit { get; set; }
         public float Qnty { get; set; }
         public int ProductCategoryId { get; set; }
     }
