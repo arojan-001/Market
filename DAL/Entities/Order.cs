@@ -13,6 +13,6 @@ namespace DAL.Entities
         public DateTime Valuedate { get; set; }
         public int CustomerId { get; set; } = 0;
         public int EmployeeId { get; set; } = 0;
-       // public List<OrderDetails> OrderDetails { get; set; }
+        public List<OrderDetails> OrderDetails { get; set; }
     }
 }

@@ -13,6 +13,7 @@ namespace DAL.Entities
         public decimal PriceOfUnit { get; set; }
         public float Qnty { get; set; }
         public int ProductCategoryId { get; set; } 
+        ProductCategory ProductCategory { get; set; }
         public List<OrderDetails> OrderDetails { get; set; }
     }
 }

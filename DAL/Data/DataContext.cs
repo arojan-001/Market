@@ -8,11 +8,12 @@ using System.Threading.Tasks;
 
 namespace DAL.Data
 {
-    public class DataCotext : DbContext
+    public class DataContext : DbContext
     {
-        public DataCotext(DbContextOptions<DataCotext> options) : base(options) { }
+        public DataContext(DbContextOptions<DataContext> options) : base(options) { }
         public DbSet<ProductCategory> ProductCategory { get; set; }
         public DbSet<Product> Product { get; set; }
         public DbSet<Order> Order { get; set; }
+        public DbSet<OrderDetails> OrderDetails { get; set; }
     }
 }
