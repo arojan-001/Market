@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DAL.Entities
 {
-    public class Product
+    public class Product : ModelBase
     {
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;

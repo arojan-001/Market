@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using BLL.Dto;
 using AutoMapper;
+using DAL.Interfaces;
 
 namespace BLL.Services
 {
@@ -19,21 +20,24 @@ namespace BLL.Services
 
     };
         private readonly IMapper _mapper;
-
-        public ProductCategoryService(IMapper mapper)
+        private readonly IProductCategoryRepository _repository;
+        public ProductCategoryService(IMapper mapper, IProductCategoryRepository repository)
         {
+            _repository = repository;
             _mapper = mapper;
         }
         public async Task<ServiceResponse<List<ProductCategoryDto>>> AddProductCategory(ProductCategoryDto productCategory)
         {
             var serviceRespone = new ServiceResponse<List<ProductCategoryDto>>();
-            productCategories.Add(_mapper.Map<ProductCategory>(productCategory));
+            //productCategories.Add(_mapper.Map<ProductCategory>(productCategory));
+            var v = await _repository.AddProductCategory(_mapper.Map<ProductCategory>(productCategory));
             serviceRespone.Data = productCategories.Select(c=> _mapper.Map<ProductCategoryDto>(c)).ToList();
             return serviceRespone;
         }
 
         public async Task<ServiceResponse<List<ProductCategoryDto>>> GetProductCategories()
         {
+            List<ProductCategory> productCategories = await _repository.GetProductCategories();
             return new ServiceResponse<List<ProductCategoryDto>>
             {
                 Data = productCategories.Select(c => _mapper.Map<ProductCategoryDto>(c)).ToList()

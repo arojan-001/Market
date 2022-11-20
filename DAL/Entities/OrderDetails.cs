@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DAL.Entities
 {
-    public class OrderDetails
+    public class OrderDetails : ModelBase
     {
         public int Id { get; set; }
         public decimal Quantity { get; set; }
