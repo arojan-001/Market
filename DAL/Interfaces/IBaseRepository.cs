@@ -8,8 +8,11 @@ namespace DAL.Interfaces
 {
     public interface IBaseRepository<TModel> where TModel : class
     {
-        Task<List<TModel>> GetAll();
-        Task<TModel> Find(params object[] keyValues);
-        Task<TModel> Add(TModel tmodel);
+        List<TModel> GetAll();
+        TModel Find(params object[] keyValues);
+        TModel Add(TModel tmodel);
+        void SetValues(TModel entity, TModel dbEntity);
+        void Remove(TModel entity);
+        void SaveChanges();
     }
 }

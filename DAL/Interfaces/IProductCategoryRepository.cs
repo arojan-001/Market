@@ -11,8 +11,8 @@ namespace DAL.Interfaces
     {
         Task<List<ProductCategory>> GetProductCategories();
         Task<ProductCategory> GetProductCategory(int id);
-        Task<ProductCategory> AddProductCategory(ProductCategory productCategory);
-
+        void AddProductCategory(ProductCategory productCategory, bool isSaveChanges = true);
+        Task<ProductCategory> DeleteProductCategory(int Id, bool isSaveChanges = true);
 
     }
 }

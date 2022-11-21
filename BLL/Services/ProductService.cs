@@ -3,6 +3,7 @@ using BLL.Dto;
 using BLL.Infrastructure;
 using BLL.Intefaces;
 using DAL.Entities;
+using DAL.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,22 +14,29 @@ namespace BLL.Services
 {
     public class ProductService : IProductService
     {
-        private static List<Product> products = new List<Product>{
-          new Product{ Id = 1, Name = "Fanta", ProductCategoryId = 1, PriceOfUnit = 300, Qnty = 10},
-          new Product{ Id = 2, Name = "Gini", ProductCategoryId = 2, PriceOfUnit = 5600, Qnty = 12}
-
-    };
+        //private static List<Product> products = new List<Product>{
+        //  new Product{ Id = 1, Name = "Fanta", ProductCategoryId = 1, PriceOfUnit = 300, Qnty = 10},
+        //  new Product{ Id = 2, Name = "Gini", ProductCategoryId = 2, PriceOfUnit = 5600, Qnty = 12}};
         private readonly IMapper _mapper;
-
-        public ProductService(IMapper mapper)
+        private readonly IProductRepository _repository;
+        public ProductService(IMapper mapper, IProductRepository repository)
         {
+            _repository = repository;
             _mapper = mapper;
         }
         public async Task<ServiceResponse<List<ProductDto>>> AddProduct(ProductDto productDto)
         {
             var serviceRespone = new ServiceResponse<List<ProductDto>>();
-            products.Add(_mapper.Map<Product>(productDto));
-            serviceRespone.Data = products.Select(c => _mapper.Map<ProductDto>(c)).ToList();
+            try
+            {
+                _repository.AddProduct(_mapper.Map<Product>(productDto));
+                serviceRespone.Data = _repository.GetProducts().Select(c => _mapper.Map<ProductDto>(c)).ToList();
+            }
+            catch (Exception ex)
+            {
+                serviceRespone.Error = ex.Message;
+                serviceRespone.Success = false;
+            }
             return serviceRespone;
         }
 
@@ -36,7 +44,7 @@ namespace BLL.Services
         {
             return new ServiceResponse<List<ProductDto>>
             {
-                Data = products.Select(c => _mapper.Map<ProductDto>(c)).ToList()
+                Data = _repository.GetProducts().Select(c => _mapper.Map<ProductDto>(c)).ToList()
 
             };
         }
@@ -44,24 +52,30 @@ namespace BLL.Services
         public async Task<ServiceResponse<ProductDto>> GetProduct(int id)
         {
             var serviceRespone = new ServiceResponse<ProductDto>();
-            var product = products.FirstOrDefault(c => c.Id == id);
-            serviceRespone.Data = _mapper.Map<ProductDto>(product);
+            try
+            {
+                var product = _repository.GetProduct(id);
+                serviceRespone.Data = _mapper.Map<ProductDto>(product);
+            }
+            catch (Exception ex)
+            {
+                serviceRespone.Error = ex.Message;
+                serviceRespone.Success = false;
+            }
             return serviceRespone;
         }
         public async Task<ServiceResponse<ProductDto>> UpdateProduct(ProductDto productDto)
         {
             var serviceRespone = new ServiceResponse<ProductDto>();
 
-            try
-            {
-                Product product = products.First(c => c.Id == productDto.Id);
+            try {
+                Product product = _repository.GetProduct(productDto.Id);
 
                 _mapper.Map(productDto, product);
-
+                _repository.AddProduct(product);
                 serviceRespone.Data = _mapper.Map<ProductDto>(product);
             }
-            catch (Exception ex)
-            {
+            catch (Exception ex){
                 serviceRespone.Error = ex.Message;
                 serviceRespone.Success = false;
             }
@@ -72,11 +86,11 @@ namespace BLL.Services
             var serviceRespone = new ServiceResponse<List<ProductDto>>();
             try
             {
-                Product product = products.First(c => c.Id == id);
+                Product product = _repository.GetProduct(id);
 
-                products.Remove(product);
+                _repository.DeleteProduct(id);
 
-                serviceRespone.Data = products.Select(c => _mapper.Map<ProductDto>(c)).ToList();
+                serviceRespone.Data = _repository.GetProducts().Select(c => _mapper.Map<ProductDto>(c)).ToList();
             }
             catch (Exception ex)
             {

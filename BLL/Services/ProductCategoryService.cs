@@ -14,11 +14,11 @@ namespace BLL.Services
 {
     public class ProductCategoryService : IProductCategoryService
     {
-      private static List<ProductCategory> productCategories = new List<ProductCategory>{
-          new ProductCategory{ Id = 2, Name= "Xmichq", Describtion = "ALKOHOLAYIN", PictureRef = "C://img.jpg" },
-          new ProductCategory{ Id = 1, Name= "Xmichq1", Describtion = "Voch ALKOHOLAYIN", PictureRef = "C://img1.jpg"}
+      //private static List<ProductCategory> productCategories = new List<ProductCategory>{
+      //    new ProductCategory{ Id = 2, Name= "Xmichq", Describtion = "ALKOHOLAYIN", PictureRef = "C://img.jpg" },
+      //    new ProductCategory{ Id = 1, Name= "Xmichq1", Describtion = "Voch ALKOHOLAYIN", PictureRef = "C://img1.jpg"}};
 
-    };
+
         private readonly IMapper _mapper;
         private readonly IProductCategoryRepository _repository;
         public ProductCategoryService(IMapper mapper, IProductCategoryRepository repository)
@@ -29,9 +29,17 @@ namespace BLL.Services
         public async Task<ServiceResponse<List<ProductCategoryDto>>> AddProductCategory(ProductCategoryDto productCategory)
         {
             var serviceRespone = new ServiceResponse<List<ProductCategoryDto>>();
-            //productCategories.Add(_mapper.Map<ProductCategory>(productCategory));
-            var v = await _repository.AddProductCategory(_mapper.Map<ProductCategory>(productCategory));
-            serviceRespone.Data = productCategories.Select(c=> _mapper.Map<ProductCategoryDto>(c)).ToList();
+            try
+            {
+                _repository.AddProductCategory(_mapper.Map<ProductCategory>(productCategory));
+                List<ProductCategory> productCategories = await _repository.GetProductCategories();
+                serviceRespone.Data = productCategories.Select(c => _mapper.Map<ProductCategoryDto>(c)).ToList();
+            }
+            catch (Exception ex)
+            {
+                serviceRespone.Error = ex.Message;
+                serviceRespone.Success = false;
+            }
             return serviceRespone;
         }
 
@@ -48,8 +56,14 @@ namespace BLL.Services
         public async Task<ServiceResponse<ProductCategoryDto>> GetProductCategory(int id)
         {
             var serviceRespone = new ServiceResponse<ProductCategoryDto>();
-            var productCategory = productCategories.FirstOrDefault(c => c.Id == id);
-            serviceRespone.Data =_mapper.Map<ProductCategoryDto>(productCategory);
+            try {
+                var productCategory = await _repository.GetProductCategory(id);
+                serviceRespone.Data = _mapper.Map<ProductCategoryDto>(productCategory);
+            }
+            catch (Exception ex) {
+                serviceRespone.Error = ex.Message;
+                serviceRespone.Success = false;
+            }
             return serviceRespone;
         }
         public async Task<ServiceResponse<ProductCategoryDto>> UpdateProductCategory(ProductCategoryDto productCategoryDto)
@@ -57,14 +71,16 @@ namespace BLL.Services
             var serviceRespone = new ServiceResponse<ProductCategoryDto>();
 
             try {
-                ProductCategory productCategory = productCategories.FirstOrDefault(c => c.Id == productCategoryDto.Id);
+                ProductCategory productCategory = await _repository.GetProductCategory(productCategoryDto.Id);//productCategories.FirstOrDefault(c => c.Id == productCategoryDto.Id);
+
 
                 _mapper.Map(productCategoryDto, productCategory);
-                //productCategory.Name = productCategoryDto.Name;
-                //productCategory.Describtion = productCategoryDto.Describtion;
-                //productCategory.PictureRef = productCategoryDto.PictureRef;
+                _repository.AddProductCategory(productCategory);
+               //productCategory.Name = productCategoryDto.Name;
+               //productCategory.Describtion = productCategoryDto.Describtion;
+               //productCategory.PictureRef = productCategoryDto.PictureRef;
 
-                serviceRespone.Data = _mapper.Map<ProductCategoryDto>(productCategory);
+               serviceRespone.Data = _mapper.Map<ProductCategoryDto>(productCategory);
             }
             catch (Exception ex)
             {
@@ -78,11 +94,13 @@ namespace BLL.Services
             var serviceRespone = new ServiceResponse<List<ProductCategoryDto>>();
             try
             {
-                ProductCategory productCategory = productCategories.First(c => c.Id == id);
-
-                productCategories.Remove(productCategory);
-
+                //ProductCategory productCategory = productCategories.First(c => c.Id == id);
+                //productCategories.Remove(productCategory);
+                await _repository.DeleteProductCategory(id);
+                List<ProductCategory> productCategories = await _repository.GetProductCategories();
                 serviceRespone.Data = productCategories.Select(c => _mapper.Map<ProductCategoryDto>(c)).ToList();
+
+                //serviceRespone.Data = productCategories.Select(c => _mapper.Map<ProductCategoryDto>(c)).ToList();
             }
             catch (Exception ex)
             {

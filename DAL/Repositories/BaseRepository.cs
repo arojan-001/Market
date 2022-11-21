@@ -15,34 +15,51 @@ namespace DAL.Repositories
     {
 
         protected readonly DataContext db;
+
         public BaseRepository(DataContext _context)
         {
             db = _context;
         }
 
-        public  async Task<List<TModel>> GetAll() {
+        public  List<TModel> GetAll() {
             try {
-                return await db.Set<TModel>().ToListAsync();
-            }
-            catch {
-                throw;
-            }
-        }
-        public async Task<TModel> Find(params object[] keyValues)
-        {
-            try {
-                return await db.Set<TModel>().FindAsync(keyValues);
+                return  db.Set<TModel>().ToList();
             }
             catch {
                 throw;
             }
         }
 
-        public async Task<TModel> Add(TModel model)
+        public TModel Find(params object[] keyValues)
         {
-            var v = await db.Set<TModel>().AddAsync(model);
-            db.SaveChangesAsync();
+            try {
+                return db.Set<TModel>().Find(keyValues);
+            }
+            catch {
+                throw;
+            }
+        }
+
+        public  TModel Add(TModel model)
+        {
+            var v = db.Set<TModel>().Add(model);
             return v.Entity;
+        }
+
+        public void SetValues(TModel entity, TModel dbEntity)
+        {
+             db.Set<TModel>().Entry(dbEntity).CurrentValues.SetValues(entity);
+
+        }
+
+        public void Remove(TModel entity) 
+        {
+            db.Set<TModel>().Remove(entity);
+        }
+
+        public  void SaveChanges()
+        {
+            db.SaveChanges();
         }
     }
 }
